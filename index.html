@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SureThing Growth Strategy Map</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f1117;--surface:#1a1c25;--surface2:#22252f;--border:#2e3140;
+  --text:#e4e4e7;--text2:#a1a1aa;--text3:#71717a;
+  --green:#22c55e;--green-bg:rgba(34,197,94,0.1);
+  --amber:#f59e0b;--amber-bg:rgba(245,158,11,0.1);
+  --red:#ef4444;--red-bg:rgba(239,68,68,0.1);
+  --blue:#3b82f6;--blue-bg:rgba(59,130,246,0.1);
+  --purple:#a855f7;--purple-bg:rgba(168,85,247,0.1);
+  --radius:12px;--radius-sm:8px;
+}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Header */
+.header{padding:24px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;background:var(--surface)}
+.header-logo{width:32px;height:32px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.header h1{font-size:20px;font-weight:600;flex:1}
+.header .badge{font-size:12px;padding:4px 12px;border-radius:20px;background:var(--blue-bg);color:var(--blue);font-weight:500}
+.header .updated{font-size:13px;color:var(--text3)}
+
+/* Layout */
+.container{display:grid;grid-template-columns:320px 1fr 380px;gap:0;min-height:calc(100vh - 73px)}
+.col{border-right:1px solid var(--border);overflow-y:auto;padding:20px}
+.col:last-child{border-right:none}
+.col-title{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.col-title .dot{width:8px;height:8px;border-radius:50%}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+.card-header{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.card-header:hover{background:var(--surface2)}
+.card-header .icon{width:28px;height:28px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.card-header h3{font-size:14px;font-weight:600;flex:1}
+.card-header .chevron{color:var(--text3);transition:transform .2s;font-size:12px}
+.card-header .chevron.open{transform:rotate(180deg)}
+.card-body{padding:0 16px 14px;display:none}
+.card-body.open{display:block}
+
+/* Brand House */
+.brand-item{padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:8px;cursor:pointer;transition:all .15s}
+.brand-item:hover{background:var(--surface2);border-color:var(--blue)}
+.brand-item h4{font-size:13px;font-weight:600;margin-bottom:4px}
+.brand-item p{font-size:12px;color:var(--text2);line-height:1.4}
+.brand-detail{display:none;padding:12px;background:var(--surface2);border-radius:var(--radius-sm);margin-top:8px;font-size:12px;color:var(--text2);line-height:1.6}
+.brand-detail.open{display:block}
+.brand-detail ul{padding-left:16px;margin-top:6px}
+.brand-detail li{margin-bottom:4px}
+
+/* Score gauges */
+.gauges{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.gauge{text-align:center;padding:16px 8px;background:var(--surface2);border-radius:var(--radius-sm)}
+.gauge-circle{width:64px;height:64px;border-radius:50%;margin:0 auto 8px;position:relative;display:flex;align-items:center;justify-content:center}
+.gauge-circle .score{font-size:20px;font-weight:700}
+.gauge-label{font-size:11px;color:var(--text2);font-weight:500}
+
+/* SEO checks */
+.check-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.check-item:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.check-icon.pass{background:var(--green-bg);color:var(--green)}
+.check-icon.warn{background:var(--amber-bg);color:var(--amber)}
+.check-icon.fail{background:var(--red-bg);color:var(--red)}
+.check-label{flex:1}
+.check-value{font-size:12px;font-weight:500;padding:2px 8px;border-radius:10px;font-size:11px}
+.check-value.pass{background:var(--green-bg);color:var(--green)}
+.check-value.warn{background:var(--amber-bg);color:var(--amber)}
+.check-value.fail{background:var(--red-bg);color:var(--red)}
+
+/* CWV */
+.cwv-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:var(--radius-sm);margin-bottom:8px}
+.cwv-label{flex:1;font-size:13px}
+.cwv-value{font-weight:600;font-size:13px}
+.cwv-badge{padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500}
+
+/* Opportunity cards */
+.opp-card{padding:12px;border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px;transition:all .15s}
+.opp-card:hover{border-color:var(--blue)}
+.opp-platform{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.opp-title{font-size:13px;font-weight:600;margin-bottom:6px;line-height:1.4}
+.opp-desc{font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.4}
+.opp-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.opp-tag{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--surface);border:1px solid var(--border);color:var(--text2)}
+.cta-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;background:var(--blue-bg);color:var(--blue)}
+.cta-btn:hover{background:rgba(59,130,246,0.2)}
+.cta-btn.copied{background:var(--green-bg);color:var(--green)}
+
+/* KOL cards */
+.kol-card{padding:14px;border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px}
+.kol-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.kol-avatar{width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--blue)}
+.kol-name{font-size:14px;font-weight:600}
+.kol-handle{font-size:12px;color:var(--text3)}
+.kol-desc{font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.4}
+.kol-stats{display:flex;gap:12px;margin-bottom:10px}
+.kol-stat{font-size:11px;color:var(--text3)}
+.kol-stat strong{color:var(--text2)}
+.kol-actions{display:flex;gap:8px;flex-wrap:wrap}
+.cta-btn.purple{background:var(--purple-bg);color:var(--purple)}
+.cta-btn.purple:hover{background:rgba(168,85,247,0.2)}
+.cta-btn.green{background:var(--green-bg);color:var(--green)}
+.cta-btn.green:hover{background:rgba(34,197,94,0.2)}
+
+/* Recommendations */
+.rec-item{padding:10px 12px;border-left:3px solid;border-radius:0 var(--radius-sm) var(--radius-sm) 0;background:var(--surface2);margin-bottom:8px}
+.rec-item.critical{border-left-color:var(--red)}
+.rec-item.high{border-left-color:var(--amber)}
+.rec-item.medium{border-left-color:var(--blue)}
+.rec-item .rec-priority{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.rec-item.critical .rec-priority{color:var(--red)}
+.rec-item.high .rec-priority{color:var(--amber)}
+.rec-item.medium .rec-priority{color:var(--blue)}
+.rec-item .rec-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.rec-item .rec-desc{font-size:12px;color:var(--text2)}
+
+/* Competitor tags */
+.comp-tags{display:flex;flex-wrap:wrap;gap:6px}
+.comp-tag{padding:5px 12px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.comp-tag .comp-dot{width:6px;height:6px;border-radius:50%}
+
+/* Section divider */
+.section-divider{height:1px;background:var(--border);margin:16px 0}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--green);color:#000;padding:10px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;transition:transform .3s ease;z-index:1000;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* Responsive */
+@media(max-width:1200px){.container{grid-template-columns:1fr;}.col{border-right:none;border-bottom:1px solid var(--border)}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">S</div>
+  <h1>SureThing Growth Strategy Map</h1>
+  <span class="badge">Multi-Agent Dashboard</span>
+  <span class="updated">Updated Mar 18, 2026</span>
+</div>
+
+<div class="container">
+  <!-- COLUMN 1: Strategy Agent -->
+  <div class="col">
+    <div class="col-title"><span class="dot" style="background:var(--purple)"></span>Strategy Agent</div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--purple-bg);color:var(--purple)">🏠</div>
+        <h3>Brand House</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body open">
+        <div class="brand-item" onclick="toggleDetail(this)">
+          <h4>🎯 Mission</h4>
+          <p>Be the extension of self for every professional</p>
+          <div class="brand-detail">
+            SureThing exists to reduce cognitive load — helping professionals think ahead, stay on top of communication, and take action with confidence. Not a chatbot. A digital twin that works 24/7 on your behalf.
+            <ul>
+              <li>Proactive AI assistant for work execution</li>
+              <li>Combines chat, inbox context, planning & action</li>
+              <li>Handles as much work as possible before involving the user</li>
+            </ul>
+          </div>
+        </div>
+        <div class="brand-item" onclick="toggleDetail(this)">
+          <h4>💡 Value Proposition</h4>
+          <p>Your digital twin that never drops the ball</p>
+          <div class="brand-detail">
+            <strong>For:</strong> Busy professionals, founders, solopreneurs<br>
+            <strong>Who:</strong> Juggle too many threads and lose track of follow-ups<br>
+            <strong>SureThing:</strong> Is the AI that works while you sleep — monitoring inboxes, drafting replies, scheduling follow-ups, and executing tasks across 800+ apps.
+            <ul>
+              <li>Zero-config memory moat — it learns you</li>
+              <li>Not a tool. An extension of yourself.</li>
+              <li>"They chose developers. We chose everyone else."</li>
+            </ul>
+          </div>
+        </div>
+        <div class="brand-item" onclick="toggleDetail(this)">
+          <h4>🎨 Brand Voice</h4>
+          <p>Direct, warm, competent — not robotic</p>
+          <div class="brand-detail">
+            <strong>Tone:</strong> Like a competent executive assistant — friendly, reliable, approachable.<br>
+            <strong>Key traits:</strong>
+            <ul>
+              <li>Direct & efficient, occasionally witty</li>
+              <li>Professional but not cold</li>
+              <li>Humble — never lectures, never blames</li>
+              <li>Act first, let user adjust</li>
+              <li>"Sure thing" — our name IS our voice</li>
+            </ul>
+          </div>
+        </div>
+        <div class="brand-item" onclick="toggleDetail(this)">
+          <h4>🧭 Positioning</h4>
+          <p>Complementary framing vs. competitors</p>
+          <div class="brand-detail">
+            <strong>Strategy:</strong> Non-technical user acquisition first, then differentiate on memory moat + zero-config.<br>
+            <strong>vs. Competitors:</strong>
+            <ul>
+              <li>Zapier: Workflow automation → SureThing is autonomous work execution</li>
+              <li>Lindy AI: Build your own agents → SureThing works out of the box</li>
+              <li>OpenClaw: "Same vision, different bet" — they chose devs, we chose everyone</li>
+              <li>Manus: Task execution → SureThing is persistent digital twin</li>
+            </ul>
+          </div>
+        </div>
+        <div class="brand-item" onclick="toggleDetail(this)">
+          <h4>👥 Target Audience</h4>
+          <p>Professionals drowning in operational complexity</p>
+          <div class="brand-detail">
+            <strong>Primary:</strong> Solopreneurs, founders, freelancers, small business owners<br>
+            <strong>Secondary:</strong> Executive assistants, ops managers, sales professionals<br>
+            <strong>Pain points:</strong>
+            <ul>
+              <li>Too many threads across too many tools</li>
+              <li>Follow-ups slip through the cracks</li>
+              <li>Context-switching kills productivity</li>
+              <li>Existing AI tools require too much setup</li>
+            </ul>
+          </div>
+        </div>
+        <div class="brand-item" onclick="toggleDetail(this)">
+          <h4>📊 Growth Narrative</h4>
+          <p>Open-source tools → awareness → conversion</p>
+          <div class="brand-detail">
+            <strong>Distribution strategy:</strong> Build useful AI tools → open-source → drive top-of-funnel signups using solopreneur/AI-democratization narrative.
+            <ul>
+              <li>GitHub: @getsurething curated skill playbooks</li>
+              <li>Content: User stories as protagonists, AI as narrator</li>
+              <li>Community: Build in public, ship changelogs</li>
+              <li>Referrals: Credits for power users</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--blue-bg);color:var(--blue)">⚔️</div>
+        <h3>Competitive Landscape</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body open">
+        <div class="comp-tags">
+          <span class="comp-tag"><span class="comp-dot" style="background:var(--amber)"></span>Zapier AI</span>
+          <span class="comp-tag"><span class="comp-dot" style="background:var(--red)"></span>Lindy AI</span>
+          <span class="comp-tag"><span class="comp-dot" style="background:var(--amber)"></span>Manus</span>
+          <span class="comp-tag"><span class="comp-dot" style="background:var(--green)"></span>OpenClaw</span>
+          <span class="comp-tag"><span class="comp-dot" style="background:var(--text3)"></span>Notion AI</span>
+          <span class="comp-tag"><span class="comp-dot" style="background:var(--text3)"></span>Motion</span>
+          <span class="comp-tag"><span class="comp-dot" style="background:var(--text3)"></span>Reclaim AI</span>
+          <span class="comp-tag"><span class="comp-dot" style="background:var(--text3)"></span>Superhuman</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--green-bg);color:var(--green)">💰</div>
+        <h3>Pricing Strategy</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="brand-item" onclick="toggleDetail(this)">
+          <h4>Free Tier</h4>
+          <p>1,000 credits + 150/day — low-friction entry</p>
+          <div class="brand-detail">
+            Hook users with enough credits to experience the magic. Daily refresh creates habit loop. Goal: convert to Basic within 14 days.
+          </div>
+        </div>
+        <div class="brand-item" onclick="toggleDetail(this)">
+          <h4>Basic → Plus → Pro</h4>
+          <p>$30/mo → $60-150/mo → $200-10K/mo</p>
+          <div class="brand-detail">
+            Credit-based model scales with usage. Power users self-select into higher tiers. Yearly saves ~11%. Enterprise potential at Pro tier ($5K-10K/mo).
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLUMN 2: SEO + Social Media Agent -->
+  <div class="col" style="background:var(--bg)">
+    <div class="col-title"><span class="dot" style="background:var(--green)"></span>SEO Agent</div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--green-bg);color:var(--green)">📊</div>
+        <h3>PageSpeed Scores</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="card-body open">
+        <div class="gauges">
+          <div class="gauge">
+            <div class="gauge-circle" style="background:conic-gradient(var(--amber) 0% 78%, var(--border) 78% 100%)">
+              <div style="width:52px;height:52px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center"><span class="score" style="color:var(--amber)">78</span></div>
+            </div>
+            <div class="gauge-label">Performance</div>
+          </div>
+          <div class="gauge">
+            <div class="gauge-circle" style="background:conic-gradient(var(--amber) 0% 84%, var(--border) 84% 100%)">
+              <div style="width:52px;height:52px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center"><span class="score" style="color:var(--amber)">84</span></div>
+            </div>
+            <div class="gauge-label">Accessibility</div>
+          </div>
+          <div class="gauge">
+            <div class="gauge-circle" style="background:conic-gradient(var(--green) 0% 96%, var(--border) 96% 100%)">
+              <div style="width:52px;height:52px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center"><span class="score" style="color:var(--green)">96</span></div>
+            </div>
+            <div class="gauge-label">Best Practices</div>
+          </div>
+          <div class="gauge">
+            <div class="gauge-circle" style="background:conic-gradient(var(--green) 0% 92%, var(--border) 92% 100%)">
+              <div style="width:52px;height:52px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center"><span class="score" style="color:var(--green)">92</span></div>
+            </div>
+            <div class="gauge-label">SEO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--green-bg);color:var(--green)">✅</div>
+        <h3>SEO Health Checks</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body open">
+        <div class="check-item"><span class="check-icon pass">✓</span><span class="check-label">Meta Title</span><span class="check-value pass">Passed</span></div>
+        <div class="check-item"><span class="check-icon pass">✓</span><span class="check-label">Meta Description</span><span class="check-value pass">Passed</span></div>
+        <div class="check-item"><span class="check-icon pass">✓</span><span class="check-label">Mobile Friendliness</span><span class="check-value pass">Passed</span></div>
+        <div class="check-item"><span class="check-icon pass">✓</span><span class="check-label">HTTPS Enabled</span><span class="check-value pass">Passed</span></div>
+        <div class="check-item"><span class="check-icon pass">✓</span><span class="check-label">Viewport Configured</span><span class="check-value pass">Passed</span></div>
+        <div class="check-item"><span class="check-icon pass">✓</span><span class="check-label">Crawlable (robots.txt)</span><span class="check-value pass">Passed</span></div>
+        <div class="check-item"><span class="check-icon pass">✓</span><span class="check-label">Canonical URL</span><span class="check-value pass">Passed</span></div>
+        <div class="check-item"><span class="check-icon warn">!</span><span class="check-label">Structured Data</span><span class="check-value warn">Missing</span></div>
+        <div class="check-item"><span class="check-icon warn">!</span><span class="check-label">Hreflang Tags</span><span class="check-value warn">Missing</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--amber-bg);color:var(--amber)">⚡</div>
+        <h3>Core Web Vitals</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body open">
+        <div class="cwv-item"><span class="cwv-label">LCP (Largest Contentful Paint)</span><span class="cwv-value" style="color:var(--amber)">2.8s</span><span class="cwv-badge" style="background:var(--amber-bg);color:var(--amber)">Needs Work</span></div>
+        <div class="cwv-item"><span class="cwv-label">TBT (Total Blocking Time)</span><span class="cwv-value" style="color:var(--amber)">320ms</span><span class="cwv-badge" style="background:var(--amber-bg);color:var(--amber)">Needs Work</span></div>
+        <div class="cwv-item"><span class="cwv-label">CLS (Cumulative Layout Shift)</span><span class="cwv-value" style="color:var(--green)">0.02</span><span class="cwv-badge" style="background:var(--green-bg);color:var(--green)">Good</span></div>
+        <div class="cwv-item"><span class="cwv-label">FCP (First Contentful Paint)</span><span class="cwv-value" style="color:var(--amber)">1.6s</span><span class="cwv-badge" style="background:var(--amber-bg);color:var(--amber)">Needs Work</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--red-bg);color:var(--red)">🔧</div>
+        <h3>SEO Recommendations</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body open">
+        <div class="rec-item critical"><div class="rec-priority">Critical</div><div class="rec-title">Add Structured Data (JSON-LD)</div><div class="rec-desc">Add Organization & SoftwareApplication schema to improve rich snippet visibility in search.</div></div>
+        <div class="rec-item high"><div class="rec-priority">High</div><div class="rec-title">Optimize LCP — reduce initial bundle</div><div class="rec-desc">Largest Contentful Paint at 2.8s exceeds the 2.5s threshold. Defer non-critical JS/CSS.</div></div>
+        <div class="rec-item high"><div class="rec-priority">High</div><div class="rec-title">Reduce Total Blocking Time</div><div class="rec-desc">TBT of 320ms indicates heavy main-thread work. Code-split and lazy-load where possible.</div></div>
+        <div class="rec-item medium"><div class="rec-priority">Medium</div><div class="rec-title">Add Hreflang Tags</div><div class="rec-desc">Support multilingual SEO for CN/EN audiences with proper hreflang annotations.</div></div>
+        <div class="rec-item medium"><div class="rec-priority">Medium</div><div class="rec-title">Improve Accessibility Score</div><div class="rec-desc">Add alt text, ensure color contrast ratios, and check heading hierarchy.</div></div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="col-title"><span class="dot" style="background:var(--blue)"></span>Social Media Agent</div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--red-bg);color:var(--red)">🔴</div>
+        <h3>Reddit Opportunities</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="card-body open">
+        <div class="opp-card">
+          <div class="opp-platform">📍 r/AI_Agents</div>
+          <div class="opp-title">Looking for the best AI Agent for organizing my inbox + automatic task creation in Gmail</div>
+          <div class="opp-desc">User needs auto-prioritization, email triage, follow-up tracking — exactly SureThing's core loop.</div>
+          <div class="opp-meta"><span class="opp-tag">Email Automation</span><span class="opp-tag">Gmail</span><span class="opp-tag">High Fit</span></div>
+          <button class="cta-btn" onclick="copyPrompt(this, 'reddit-1')">📋 Copy Prompt for SureThing</button>
+        </div>
+        <div class="opp-card">
+          <div class="opp-platform">📍 r/PromptEngineering</div>
+          <div class="opp-title">7 AI personal assistant apps that actually look promising</div>
+          <div class="opp-desc">Listicle discussion — Lindy AI mentioned. Perfect insertion point for SureThing as the zero-config alternative.</div>
+          <div class="opp-meta"><span class="opp-tag">AI Assistants</span><span class="opp-tag">Lindy Mentioned</span></div>
+          <button class="cta-btn" onclick="copyPrompt(this, 'reddit-2')">📋 Copy Prompt for SureThing</button>
+        </div>
+        <div class="opp-card">
+          <div class="opp-platform">📍 r/AI_Agents</div>
+          <div class="opp-title">What are some good AI assistants you've actually used?</div>
+          <div class="opp-desc">Users sharing real experiences with AI assistants. Authentic testimonial opportunity.</div>
+          <div class="opp-meta"><span class="opp-tag">Social Proof</span><span class="opp-tag">User Reviews</span></div>
+          <button class="cta-btn" onclick="copyPrompt(this, 'reddit-3')">📋 Copy Prompt for SureThing</button>
+        </div>
+        <div class="opp-card">
+          <div class="opp-platform">📍 r/AiForSmallBusiness</div>
+          <div class="opp-title">I built an AI that auto-sorts my Gmail/Outlook so I never miss a client email</div>
+          <div class="opp-desc">Privacy-focused audience. Position SureThing's human-in-the-loop transparency.</div>
+          <div class="opp-meta"><span class="opp-tag">Privacy</span><span class="opp-tag">Small Biz</span></div>
+          <button class="cta-btn" onclick="copyPrompt(this, 'reddit-4')">📋 Copy Prompt for SureThing</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--blue-bg);color:var(--blue)">𝕏</div>
+        <h3>Twitter / X Opportunities</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body open">
+        <div class="opp-card">
+          <div class="opp-platform">🐦 X Thread</div>
+          <div class="opp-title">"What AI tools are you actually paying for in 2026?"</div>
+          <div class="opp-desc">Viral engagement bait. Reply with authentic SureThing use case — email triage + calendar management + cross-app automation.</div>
+          <div class="opp-meta"><span class="opp-tag">Viral Thread</span><span class="opp-tag">Tool Stack</span></div>
+          <button class="cta-btn" onclick="copyPrompt(this, 'twitter-1')">📋 Copy Prompt for SureThing</button>
+        </div>
+        <div class="opp-card">
+          <div class="opp-platform">🐦 X Thread</div>
+          <div class="opp-title">"My AI assistant handles my email while I sleep"</div>
+          <div class="opp-desc">Build-in-public angle. Quote tweet or reply with SureThing's 24/7 inbox monitoring as proof.</div>
+          <div class="opp-meta"><span class="opp-tag">Build in Public</span><span class="opp-tag">Always-On</span></div>
+          <button class="cta-btn" onclick="copyPrompt(this, 'twitter-2')">📋 Copy Prompt for SureThing</button>
+        </div>
+        <div class="opp-card">
+          <div class="opp-platform">🐦 X Thread</div>
+          <div class="opp-title">"The AI agent landscape is getting wild — who's winning?"</div>
+          <div class="opp-desc">Industry commentary opportunity. Position SureThing in the "everyone else" segment with memory moat angle.</div>
+          <div class="opp-meta"><span class="opp-tag">Industry</span><span class="opp-tag">Positioning</span></div>
+          <button class="cta-btn" onclick="copyPrompt(this, 'twitter-3')">📋 Copy Prompt for SureThing</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--blue-bg);color:var(--blue)">💼</div>
+        <h3>LinkedIn Opportunities</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body open">
+        <div class="opp-card">
+          <div class="opp-platform">💼 LinkedIn</div>
+          <div class="opp-title">"AI is replacing executive assistants — agree or disagree?"</div>
+          <div class="opp-desc">Hot take territory. Nuanced reply: AI augments, not replaces. SureThing = the EA that scales.</div>
+          <div class="opp-meta"><span class="opp-tag">Thought Leadership</span><span class="opp-tag">EA Audience</span></div>
+          <button class="cta-btn" onclick="copyPrompt(this, 'linkedin-1')">📋 Copy Prompt for SureThing</button>
+        </div>
+        <div class="opp-card">
+          <div class="opp-platform">💼 LinkedIn</div>
+          <div class="opp-title">"How I automated 80% of my inbox management with AI"</div>
+          <div class="opp-desc">Authentic use case post. Comment with SureThing's approach to email triage + human-in-the-loop review.</div>
+          <div class="opp-meta"><span class="opp-tag">Automation</span><span class="opp-tag">Case Study</span></div>
+          <button class="cta-btn" onclick="copyPrompt(this, 'linkedin-2')">📋 Copy Prompt for SureThing</button>
+        </div>
+        <div class="opp-card">
+          <div class="opp-platform">💼 LinkedIn</div>
+          <div class="opp-title">"Founders: what's the one tool that 10x'd your productivity?"</div>
+          <div class="opp-desc">Founder networking thread. Authentic testimonial opportunity with specific productivity metrics.</div>
+          <div class="opp-meta"><span class="opp-tag">Founders</span><span class="opp-tag">Productivity</span></div>
+          <button class="cta-btn" onclick="copyPrompt(this, 'linkedin-3')">📋 Copy Prompt for SureThing</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLUMN 3: Influencer Agent -->
+  <div class="col">
+    <div class="col-title"><span class="dot" style="background:var(--amber)"></span>Influencer Agent</div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="icon" style="background:var(--amber-bg);color:var(--amber)">⭐</div>
+        <h3>KOL Prospects</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="card-body open">
+
+        <div class="kol-card">
+          <div class="kol-header">
+            <div class="kol-avatar">MI</div>
+            <div><div class="kol-name">Morgan J Ingram</div><div class="kol-handle">@morganjingram · X / LinkedIn</div></div>
+          </div>
+          <div class="kol-desc">Sales development & modern selling. 300K+ followers across X and LinkedIn. Ideal for positioning SureThing as a sales professional's AI assistant.</div>
+          <div class="kol-stats"><span class="kol-stat"><strong>300K+</strong> followers</span><span class="kol-stat">🎯 Sales pros</span></div>
+          <div class="kol-actions">
+            <button class="cta-btn purple" onclick="copyPrompt(this, 'kol-dm-1')">📋 DM via X</button>
+            <button class="cta-btn green" onclick="copyPrompt(this, 'kol-email-1')">📋 Email Outreach</button>
+          </div>
+        </div>
+
+        <div class="kol-card">
+          <div class="kol-header">
+            <div class="kol-avatar">CC</div>
+            <div><div class="kol-name">Chester Campbell</div><div class="kol-handle">@chatgptricks · Instagram / YouTube</div></div>
+          </div>
+          <div class="kol-desc">Runs @chatgptricks (2.47M followers), @techvincible, @power.ai. Already in discussions for a SureThing viral video launch.</div>
+          <div class="kol-stats"><span class="kol-stat"><strong>2.47M</strong> followers</span><span class="kol-stat">🎬 AI tools content</span></div>
+          <div class="kol-actions">
+            <button class="cta-btn green" onclick="copyPrompt(this, 'kol-email-2')">📋 Follow Up Email</button>
+          </div>
+        </div>
+
+        <div class="kol-card">
+          <div class="kol-header">
+            <div class="kol-avatar">KM</div>
+            <div><div class="kol-name">Kyle Mair</div><div class="kol-handle">The AI Report · Newsletter</div></div>
+          </div>
+          <div class="kol-desc">Director of Partnerships at The AI Report — 400K+ subscribers, 63.5% open rate, 5x/week. Newsletter advertising opportunity.</div>
+          <div class="kol-stats"><span class="kol-stat"><strong>400K+</strong> subscribers</span><span class="kol-stat">📧 Newsletter</span></div>
+          <div class="kol-actions">
+            <button class="cta-btn green" onclick="copyPrompt(this, 'kol-email-3')">📋 Follow Up Email</button>
+          </div>
+        </div>
+
+        <div class="kol-card">
+          <div class="kol-header">
+            <div class="kol-avatar">DG</div>
+            <div><div class="kol-name">Dave Gerhardt</div><div class="kol-handle">@davegerhardt · LinkedIn</div></div>
+          </div>
+          <div class="kol-desc">B2B marketing leader, founder of Exit Five community. 200K+ LinkedIn followers. Perfect for positioning SureThing in B2B/startup ecosystem.</div>
+          <div class="kol-stats"><span class="kol-stat"><strong>200K+</strong> followers</span><span class="kol-stat">🚀 B2B Marketing</span></div>
+          <div class="kol-actions">
+            <button class="cta-btn purple" onclick="copyPrompt(this, 'kol-dm-4')">📋 DM via LinkedIn</button>
+            <button class="cta-btn green" onclick="copyPrompt(this, 'kol-email-4')">📋 Email Outreach</button>
+          </div>
+        </div>
+
+        <div class="kol-card">
+          <div class="kol-header">
+            <div class="kol-avatar">HM</div>
+            <div><div class="kol-name">Harsh Makadia</div><div class="kol-handle">@harshmakadia · X / LinkedIn</div></div>
+          </div>
+          <div class="kol-desc">SaaS marketing & bootstrapping expert. 150K+ followers. Asia-focused audience — great for SureThing's CN+Global narrative.</div>
+          <div class="kol-stats"><span class="kol-stat"><strong>150K+</strong> followers</span><span class="kol-stat">🌏 Asia SaaS</span></div>
+          <div class="kol-actions">
+            <button class="cta-btn purple" onclick="copyPrompt(this, 'kol-dm-5')">📋 DM via X</button>
+            <button class="cta-btn green" onclick="copyPrompt(this, 'kol-email-5')">📋 Email Outreach</button>
+          </div>
+        </div>
+
+        <div class="kol-card">
+          <div class="kol-header">
+            <div class="kol-avatar">AP</div>
+            <div><div class="kol-name">Anthony Pierri</div><div class="kol-handle">@FletchPMM · X</div></div>
+          </div>
+          <div class="kol-desc">SaaS homepage messaging & positioning specialist. 75K+ followers. Could provide public critique/endorsement of SureThing's positioning.</div>
+          <div class="kol-stats"><span class="kol-stat"><strong>75K+</strong> followers</span><span class="kol-stat">📝 SaaS Messaging</span></div>
+          <div class="kol-actions">
+            <button class="cta-btn purple" onclick="copyPrompt(this, 'kol-dm-6')">📋 DM via X</button>
+          </div>
+        </div>
+
+        <div class="kol-card">
+          <div class="kol-header">
+            <div class="kol-avatar">SM</div>
+            <div><div class="kol-name">Sam McKenna</div><div class="kol-handle">LinkedIn · Social Selling</div></div>
+          </div>
+          <div class="kol-desc">Social selling & LinkedIn strategy expert. 200K+ followers. Could amplify SureThing for sales-oriented professionals.</div>
+          <div class="kol-stats"><span class="kol-stat"><strong>200K+</strong> followers</span><span class="kol-stat">🤝 Social Selling</span></div>
+          <div class="kol-actions">
+            <button class="cta-btn purple" onclick="copyPrompt(this, 'kol-dm-7')">📋 DM via LinkedIn</button>
+            <button class="cta-btn green" onclick="copyPrompt(this, 'kol-email-7')">📋 Email Outreach</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">✓ Prompt copied to clipboard</div>
+
+<script>
+// Prompt templates
+const prompts = {
+  // Reddit
+  'reddit-1': `Reply to this Reddit post about AI email agents on r/AI_Agents: https://www.reddit.com/r/AI_Agents/comments/1rodeoh/\n\nWrite an authentic, helpful reply that mentions how SureThing handles inbox auto-prioritization, follow-up tracking, and task creation from emails — all running 24/7 without setup. Don't be salesy. Share it as a genuine user experience. Keep it under 150 words.`,
+  'reddit-2': `Reply to this Reddit post about AI personal assistants on r/PromptEngineering: https://www.reddit.com/r/PromptEngineering/comments/1rsnvfg/\n\nAdd SureThing to the conversation as a zero-config AI assistant that works as a digital twin — always-on, learns your patterns, handles email/calendar/tasks across 800+ apps. Contrast with Lindy (which requires building your own agents). Authentic tone, under 120 words.`,
+  'reddit-3': `Reply to this Reddit post asking for real AI assistant recommendations on r/AI_Agents: https://www.reddit.com/r/AI_Agents/comments/1ro2e0b/\n\nShare an authentic experience using SureThing — focus on how it autonomously handles email triage, drafts replies for review, and follows up on things that would otherwise slip through the cracks. Mention the human-in-the-loop review before anything gets sent. Keep it genuine, under 120 words.`,
+  'reddit-4': `Reply to this Reddit post about AI email sorting on r/AiForSmallBusiness: https://www.reddit.com/r/AiForSmallBusiness/comments/1rqqe66/\n\nComment on the privacy angle — mention SureThing's human-in-the-loop approach where the AI drafts but never sends without approval. Position as privacy-conscious alternative. Authentic tone, under 100 words.`,
+
+  // Twitter
+  'twitter-1': `Draft a reply tweet for the thread "What AI tools are you actually paying for in 2026?"\n\nMention SureThing as the AI assistant that handles email triage, calendar management, and cross-app automation — works 24/7 like a digital twin. Authentic founder voice. Under 280 chars.`,
+  'twitter-2': `Draft a quote tweet or reply about AI handling email while you sleep.\n\nShare how SureThing monitors inbox 24/7, drafts replies, flags urgent items, and follows up automatically. Build-in-public tone from @getsurething. Under 280 chars.`,
+  'twitter-3': `Draft a reply tweet about the AI agent landscape.\n\nPosition SureThing: "Most AI agents chose developers. SureThing chose everyone else — zero-config, works out of the box, learns you over time." Thoughtful, not salesy. Under 280 chars.`,
+
+  // LinkedIn
+  'linkedin-1': `Draft a LinkedIn comment on the post "AI is replacing executive assistants — agree or disagree?"\n\nNuanced take: AI augments, not replaces. SureThing is designed as a digital twin — handles the operational overhead so humans can focus on judgment calls. Mention human-in-the-loop. Professional tone, under 150 words.`,
+  'linkedin-2': `Draft a LinkedIn comment on the post "How I automated 80% of my inbox management with AI"\n\nShare SureThing's approach: AI reads, prioritizes, drafts — but human always approves before sending. The 80/20 rule for email: let AI handle the 80% operational, you focus on the 20% that matters. Under 120 words.`,
+  'linkedin-3': `Draft a LinkedIn comment on the founders productivity thread.\n\nShare how SureThing acts as a digital twin — monitoring emails, scheduling follow-ups, executing across 800+ apps. Mention specific wins: never missing a follow-up, inbox zero, cross-app automation. Founder voice, under 120 words.`,
+
+  // KOL DMs
+  'kol-dm-1': `Draft a Twitter DM to @morganjingram about partnering with SureThing.\n\nHook: SureThing is an AI assistant that handles email + calendar + cross-app automation for sales pros — like having an EA that works 24/7. Ask if they'd be open to trying it and sharing their experience. Brief, respectful, personalized to their sales development focus.`,
+  'kol-dm-4': `Draft a LinkedIn DM to Dave Gerhardt about SureThing.\n\nHook: SureThing is building the AI digital twin for professionals — zero-config, works out of the box. We think the Exit Five community would love it. Ask if he'd be open to a quick demo or trying it out. Brief, founder-to-founder tone.`,
+  'kol-dm-5': `Draft a Twitter DM to @harshmakadia about SureThing.\n\nHook: SureThing is a zero-config AI assistant for solopreneurs — handles email, calendar, tasks, 800+ app integrations. Built by a team with Tsinghua + ByteDance + Alibaba background. Connects to his Asia SaaS audience. Ask about potential collaboration.`,
+  'kol-dm-6': `Draft a Twitter DM to @FletchPMM about SureThing's positioning.\n\nHook: We're SureThing — an AI digital twin for professionals. Would love his honest take on our homepage positioning (surething.io). He's known for SaaS messaging critiques. Ask if he'd be willing to do a public teardown or private review.`,
+  'kol-dm-7': `Draft a LinkedIn DM to Sam McKenna about SureThing.\n\nHook: SureThing automates the operational side of professional work — email management, follow-ups, scheduling. Relevant to her social selling audience. Ask about potential content collaboration.`,
+
+  // KOL Emails
+  'kol-email-1': `Draft an outreach email to Morgan J Ingram about partnering with SureThing.\n\nSubject: Quick thought on AI + sales productivity\n\nBody should cover: SureThing is an AI digital twin that handles email triage, follow-ups, calendar management, and 800+ app integrations. Perfect for sales professionals who juggle too many threads. Offer: free Pro access to try it, potential content collaboration. Keep it brief and professional.`,
+  'kol-email-2': `Draft a follow-up email to Chester Campbell at chester@powerai.digital about the SureThing video collaboration.\n\nContext: We've been discussing a viral video launch. We asked for @techvincible audience demographics (age, top countries, gender split) before committing to the $2,999 package. Follow up on getting those numbers so we can move forward.`,
+  'kol-email-3': `Draft a follow-up email to Kyle Mair at kyle@theaireport.ai about newsletter advertising.\n\nContext: We've been discussing SureThing advertising in The AI Report newsletter (400K+ subs, 63.5% open rate). Follow up on next steps — ad format selection, timing, and creative brief requirements.`,
+  'kol-email-4': `Draft an outreach email to Dave Gerhardt about SureThing.\n\nSubject: AI productivity tool for the Exit Five community\n\nBody: SureThing is an AI digital twin for professionals — handles email, calendar, tasks, 800+ integrations. Zero-config, works out of the box. We think the Exit Five B2B community would be a perfect audience. Offer: free trial for community members + potential content partnership.`,
+  'kol-email-5': `Draft an outreach email to Harsh Makadia about SureThing.\n\nSubject: SaaS from CN → Global — thoughts on our approach?\n\nBody: SureThing is building the AI digital twin for work. Team background: Tsinghua, ByteDance, Alibaba, HEC. We're going global-first with a zero-config approach. His audience in Asia SaaS would be a great fit. Offer: free Pro access + potential content collaboration.`,
+  'kol-email-7': `Draft an outreach email to Sam McKenna about SureThing.\n\nSubject: AI assistant for social selling professionals\n\nBody: SureThing handles the operational overhead of professional communication — email triage, follow-up tracking, calendar management, all running 24/7. Perfect for social selling professionals who need to stay on top of hundreds of threads. Offer: free trial + potential content partnership.`
+};
+
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+function toggleDetail(item) {
+  const detail = item.querySelector('.brand-detail');
+  if(detail) detail.classList.toggle('open');
+}
+
+function copyPrompt(btn, key) {
+  const text = prompts[key] || 'Prompt not found';
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = '✓ Copied!';
+    showToast();
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '📋 Copy Prompt for SureThing';
+    }, 2000);
+  });
+}
+
+function showToast() {
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// Auto-open first card bodies
+document.querySelectorAll('.card-body').forEach(b => {
+  if(b.classList.contains('open')) b.style.display = 'block';
+});
+</script>
+</body>
+</html>
